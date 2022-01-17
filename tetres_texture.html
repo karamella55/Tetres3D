@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Tetres3D</title>
+
+
+<canvas id="scene"></canvas>
+<script src="lib/three.min.js"></script>
+<script src="lib/OrbitControls.js"></script>
+
+
+
+<style type="text/css">
+    
+.menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+
+        button {
+            margin-bottom: 6px;
+            width: 120px;
+            font-size: 14px;
+            outline: none;
+            background: #333;
+            color: #ddd;
+            border: none;
+            opacity: .5;
+        }
+
+        button:hover {
+            background: #222;
+            color: #eee;
+        }
+
+        body {
+        margin: 0px;
+        }
+
+        
+.score{
+            font-family: "Lucida Handwriting", Times, cursive;    
+            position: fixed;
+            top: 20px;
+            left: 800px;
+              color: #fff;
+        }
+
+
+
+
+
+</style>
+
+
+
+
+</head>
+<body>
+
+
+<div class="score" id="Scoree"><h2> Score:<div id="score"><center>0</center></h2></div></div>
+
+<div class="menu">
+        
+        <button onclick="StartAnimation()">Start</button>
+        <br>
+        <br>
+        <button onclick="ResetParameters()">Restart</button>
+       
+
+ </div>
+
+
+<script>
+
+
+//setting all neede variables
+skyboxImage = 'space';
+var score=0;
+var paused = true;
+var running = false;
+var reset=0;
+
+//////////////geting width and height
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+
+
+///////////////////function initial    
+function init(){
+
+	/* WEBGL RENDERER */
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0x000000);
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+
+ 
+
+	/* CAMERA */
+
+	
+	
+	camera = new THREE.PerspectiveCamera(100, ww/wh, 1, 10000 );
+
+	control = new THREE.OrbitControls( camera );
+	/////
+
+	camera.position.set(10,30, -50);
+	control.update();
+	//And finally we add our camera in our scene
+	scene.add(camera);
+
+
+
+////////crating a skybox///////////
+  SkyBoxmaterial(skyboxImage);
+
+  skyboxGeo = new THREE.BoxGeometry(10000, 10000, 10000);
+  skybox = new THREE.Mesh(skyboxGeo, materialArray);
+
+  scene.add(skybox);
+
+///////////////////////////////////  
+
+//Create all shapes in the scene
+	
+createShapes();
+
+////////////////////////////////
+
+	
+
+ ///////creating SpotLight 
+
+	SpotLight = new THREE.SpotLight(0xFFFFFF, 1.0,100, 180* Math.PI/180);
+    SpotLight.castShadow = true;
+    SpotLight.position.set(0, 0, -40);
+////////creating PointLight
+
+    pointLight = new THREE.PointLight( 0xFFFFFF, 1, 50 );
+    pointLight.position.set(0, 20, 20);
+    pointLight.castShadow = true; // default false
+
+//////////Adding both light to the seen
+scene.add(pointLight);
+scene.add(SpotLight);
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+
+////////////////End of INIT
+};
+
+
+
+
+
+/////////Function to Start the game
+function StartAnimation() {
+        if (paused) {
+            //continue where you left of here/////
+            init();
+            start();
+            score==0;
+            paused=false;
+            running=true;
+        }
+    }
+
+///////////////////////////////////
+
+
+/////////////Function to reset all shapes
+ function ResetParameters() {
+
+scene.remove.apply(scene, scene.children);
+        
+var score=0;
+
+document.getElementById("score").innerHTML=score;
+        
+init();
+createShapes();
+        
+running=false;
+pause=true;
+
+}
+
+//////////////////Function Start which calls all the objects to translate
+function start(){
+
+ var time=0;
+for(var i=0;i<10;i++){
+setTimeout(shapes1,time);
+setTimeout(translateobject1,time);
+          
+
+    
+    
+   
+
+setTimeout(shape2,time+=6000);
+setTimeout(translateobject2,time);
+          
+
+
+setTimeout(shape3,time+=6000);
+setTimeout(translateobject3,time);
+         
+
+setTimeout(shape4,time+=6000);
+setTimeout(translateobject4,time);
+       
+
+setTimeout(shape5,time+=6000);
+setTimeout(translateobject5,time);
+          
+
+
+time+=6000;
+
+
+
+
+}
+
+}
+
+////////////////Function to add images to the skybox
+
+function SkyBoxmaterial(filename) {
+			
+			
+texture = new THREE.TextureLoader().load('d1a4676a-7605-46b0-b092-6bd41c0dd700.jpg');
+materialArray=new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
+			
+return materialArray;
+
+}
+
+
+////////////////Function to crate the plane of the game
+function createShapes(){
+
+geometry = new THREE.PlaneGeometry( 35, 35 );
+texture = new THREE.TextureLoader().load('169ca632-41ec-464e-b042-ce49f446e4a3.png');
+ material = new THREE.MeshBasicMaterial( {map:texture, side: THREE.DoubleSide} );
+ plane = new THREE.Mesh( geometry, material );
+ plane.rotation.x=190
+scene.add( plane );
+
+};
+
+
+//////////from here we create all the shapes
+
+
+
+function shapes1(){
+
+///////////////////first shape []
+material = new THREE.MeshLambertMaterial( {color:  new THREE.Color(parseInt(Math.random()*16777216))} );
+
+
+ geometry = new THREE.BoxGeometry( 5, 5, 5 );
+
+ geometry2 = new THREE.BoxGeometry( 5, 5, 5 );
+
+ geometry3 = new THREE.BoxGeometry( 5, 5, 5);
+
+ geometry4 = new THREE.BoxGeometry( 5, 5, 5 );
+
+///cube1
+ cube = new THREE.Mesh( geometry, material );
+///cube2
+cube2 = new THREE.Mesh( geometry2, material );
+cube2.position.x=5;
+cube2.position.y=0;
+
+
+///cube3
+cube3 = new THREE.Mesh( geometry3, material );
+cube3.position.x=10;
+cube3.position.y=0;
+///cube4
+cube4 = new THREE.Mesh( geometry4, material );
+cube4.position.x=5;
+cube4.position.y=5;
+
+///groping all the shapes
+group = new THREE.Group();
+group.add( cube );
+group.add( cube2 );
+group.add( cube3 );
+group.add( cube4 );
+group.position.y=30
+scene.add( group );
+/////adding score
+score+=10;
+document.getElementById("score").innerHTML=score;
+renderer.render(scene, camera);
+};
+
+//////////////////////////////////
+///////////////////////////seecond shape[]
+function shape2(){
+material5 = new THREE.MeshLambertMaterial( {color:  new THREE.Color(parseInt(Math.random()*16777216))} );
+
+geometry5 = new THREE.BoxGeometry( 5, 5, 5 );
+geometry6 = new THREE.BoxGeometry( 5, 5, 5 );
+geometry7 = new THREE.BoxGeometry( 5, 5, 5 );
+geometry8 = new THREE.BoxGeometry( 5, 5, 5 );
+
+
+
+ ///cube5
+cube5 = new THREE.Mesh( geometry5, material5 );
+cube5.position.x=15;
+cube5.position.y=5;
+///cube6
+cube6 = new THREE.Mesh( geometry6, material5 );
+cube6.position.x=5;
+cube6.position.y=0;
+///cube7
+cube7 = new THREE.Mesh( geometry7, material5 );
+cube7.position.x=10;
+cube7.position.y=0;
+///cube8
+cube8 = new THREE.Mesh( geometry8, material5 );
+cube8.position.x=10;
+cube8.position.y=5;
+
+/////////creating  group 2
+group2 = new THREE.Group();
+group2.add( cube5 );
+group2.add( cube6 );
+group2.add( cube7 );
+group2.add( cube8 );
+group2.position.y=30;
+scene.add( group2 );
+
+/////Adding Score
+score+=10;
+document.getElementById("score").innerHTML=score;
+renderer.render(scene, camera);
+
+};
+
+/////////////////////////////////////////////
+///////////////////////////////third shape[]
+function shape3(){
+  material9 = new THREE.MeshLambertMaterial( {color:  new THREE.Color(parseInt(Math.random()*16777216))} ); 
+
+
+ geometry9 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry10 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry11 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry12 = new THREE.BoxGeometry( 5, 5, 5 );
+
+
+/////cube9
+cube9 = new THREE.Mesh( geometry9, material9 );
+cube9.position.x=5;
+cube9.position.y=5;
+///cube10
+cube10 = new THREE.Mesh( geometry10, material9 );
+cube10.position.x=5;
+cube10.position.y=0;
+///cube11
+cube11 = new THREE.Mesh( geometry11, material9 );
+cube11.position.x=10;
+cube11.position.y=0;
+///cube12
+cube12 = new THREE.Mesh( geometry12, material9);
+cube12.position.x=10;
+cube12.position.y=5;
+
+//////creating group3
+group3 = new THREE.Group();
+group3.add( cube9 );
+group3.add( cube10 );
+group3.add( cube11 );
+group3.add( cube12 );
+group3.position.y=30;
+scene.add( group3 );
+
+////Adding score
+score+=10;
+document.getElementById("score").innerHTML=score;
+renderer.render(scene, camera)
+};
+
+//////////////////////////////////////////////////////////
+/////////////////////////////fourth shape[]
+function shape4(){
+
+ material14 = new THREE.MeshLambertMaterial( {color:  new THREE.Color(parseInt(Math.random()*16777216))} );
+
+
+
+ geometry14 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry15 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry16 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry17 = new THREE.BoxGeometry( 5, 5, 5 );
+
+
+
+///cube14
+cube14 = new THREE.Mesh( geometry14, material14 );
+cube14.position.x=5;
+cube14.position.y=0;
+///cube15
+cube15 = new THREE.Mesh( geometry15, material14 );
+cube15.position.x=10;
+cube15.position.y=0;
+///cube16
+cube16 = new THREE.Mesh( geometry16, material14 );
+cube16.position.x=15;
+cube16.position.y=0;
+///cube17
+cube17 = new THREE.Mesh( geometry17, material14 );
+cube17.position.x=15;
+cube17.position.y=5;
+
+
+//////////creating group4
+group4 = new THREE.Group();
+group4.add( cube14 );
+group4.add( cube15 );
+group4.add( cube16 );
+group4.add( cube17 );
+group4.position.y=30;
+scene.add( group4 );
+
+////Adding Score
+score+=10;
+document.getElementById("score").innerHTML=score;
+renderer.render(scene, camera)
+};
+
+//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////fifth shape[]
+function shape5(){
+ material18 = new THREE.MeshLambertMaterial( {color:  new THREE.Color(parseInt(Math.random()*16777216))} );
+
+
+ geometry18 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry19 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry20 = new THREE.BoxGeometry( 5, 5, 5 );
+ geometry21 = new THREE.BoxGeometry( 5, 5, 5 );
+
+///cube18
+cube18 = new THREE.Mesh( geometry18, material18 );
+cube18.position.x=0;
+cube18.position.y=0;
+
+///cube19
+cube19 = new THREE.Mesh( geometry19, material18 );
+cube19.position.x=5;
+cube19.position.y=0;
+
+///cube20
+cube20 = new THREE.Mesh( geometry20, material18 );
+cube20.position.x=10;
+cube20.position.y=0;
+
+
+///cube21
+cube21 = new THREE.Mesh( geometry21, material18 );
+cube21.position.x=15;
+cube21.position.y=0;
+
+
+////creating Group5
+group5 = new THREE.Group();
+group5.add( cube18 );
+group5.add( cube19 );
+group5.add( cube20 );
+group5.add( cube21 );
+group5.position.y=30;
+scene.add( group5 );
+
+////adding Score
+score+=10;
+document.getElementById("score").innerHTML=score;
+renderer.render(scene, camera);
+};
+
+///////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////
+///////Function to translate object1
+function translateobject1(){
+	
+///variable to stop the shape on the plane
+var targetPositionY=2.2;
+
+
+
+requestAnimationFrame(translateobject1);
+document.onkeydown = (e) => {
+ 
+if (e.key == 'ArrowLeft' ) {
+if(group.position.x<5){group.translateX(5); }
+    	 
+                           }
+
+    if (e.key == 'ArrowRight') {
+
+   if(group.position.x>-15) {	group.translateX(-5);}  
+
+                               }
+    if (e.key == 'ArrowUp') { 
+
+    if(group.position.z<15){	group.translateZ(5);}
+                            
+                            }
+
+    if (e.key == 'ArrowDown') { 
+
+    	if(group.position.z>-15){group.translateZ(-5);}
+   
+                             }
+    
+    
+   
+}
+
+////condition to controll the translation of the object
+
+ if (group.position.y >= targetPositionY) {
+        group.position.y -= 0.2;
+}
+
+renderer.render(scene, camera);
+
+
+}
+
+/////////function to translate object 2
+function translateobject2(){
+	
+/////variable to stop the shape on the plane
+var targetPositionY2=2.2;
+
+
+requestAnimationFrame(translateobject2);
+
+document.onkeydown = (e) => {
+ 
+    if (e.key == 'ArrowLeft' ) {
+if(group2.position.x<0){group2.translateX(5); }
+    	 
+                               }
+    if (e.key == 'ArrowRight') {
+
+   if(group2.position.x>-20) {	group2.translateX(-5);} 
+
+                               }
+
+    if (e.key == 'ArrowUp') { 
+
+    if(group2.position.z<15){	group2.translateZ(5);}
+   
+
+                            }
+
+    if (e.key == 'ArrowDown') { 
+
+    	if(group2.position.z>-15){group2.translateZ(-5);}
+                               }
+    
+    
+   
+}
+
+//////Trying to make a collision betwen shapes
+if(group2.position.y>=  group.position.y )
+    { targetPositionY2+=5; }
+
+
+
+/////the speed of the shape
+ if (group2.position.y >= targetPositionY2) {
+        group2.position.y -= 0.2;
+}
+
+
+renderer.render(scene, camera);
+
+}
+
+
+/////Function to translate shape3
+function translateobject3(){
+	
+///variable to stop the shape
+var targetPositionY3=2.2;
+
+
+requestAnimationFrame(translateobject3);
+document.onkeydown = (e) => {
+ 
+    if (e.key == 'ArrowLeft' ) {
+if(group3.position.x<5){group3.translateX(5); }
+    	                       }
+    if (e.key == 'ArrowRight') {
+
+   if(group3.position.x>-20) {	group3.translateX(-5);}  
+
+                                }
+
+    if (e.key == 'ArrowUp') { 
+
+    if(group3.position.z<15){	group3.translateZ(5);}
+                            
+
+                            }
+
+    if (e.key == 'ArrowDown') { 
+
+    	if(group3.position.z>-15){group3.translateZ(-5);}
+                               }
+    
+}
+  ////speed of the shape
+ if (group3.position.y >= targetPositionY3) {
+        group3.position.y -= 0.2;
+}
+
+renderer.render(scene, camera);
+}
+
+
+
+/////////Function to translate shape4
+function translateobject4(){
+	
+/////variable to stop the shape
+var targetPositionY4=2.2;
+
+
+
+requestAnimationFrame(translateobject4);
+document.onkeydown = (e) => {
+ 
+    if (e.key == 'ArrowLeft' ) {
+if(group4.position.x<0){group4.translateX(5); }
+    	  
+                                }
+
+
+    if (e.key == 'ArrowRight') {
+
+   if(group4.position.x>-20) {	group4.translateX(-5);}  
+
+                               }
+
+    if (e.key == 'ArrowUp') { 
+
+    if(group4.position.z<15){	group4.translateZ(5);}
+    
+
+                            }
+
+    if (e.key == 'ArrowDown') { 
+
+    	if(group4.position.z>-15){group4.translateZ(-5);}
+                              }
+}
+
+
+///speed of the shape
+ if (group4.position.y >= targetPositionY4) {
+        group4.position.y -= 0.2;
+}
+
+renderer.render(scene, camera);
+}
+
+
+
+////Function to  translate shape5
+function translateobject5(){
+	
+////variable to stop the shape
+var targetPositionY5=2.2;
+
+requestAnimationFrame(translateobject5);
+document.onkeydown = (e) => {
+ 
+    if (e.key == 'ArrowLeft' ) {
+if(group5.position.x<0){group5.translateX(5); }
+    	 
+
+                               }
+    if (e.key == 'ArrowRight') {
+
+   if(group5.position.x>-15) {	group5.translateX(-5);}  
+
+                               }
+
+    if (e.key == 'ArrowUp') { 
+
+    if(group5.position.z<15){	group5.translateZ(5);}
+                            
+
+                            }
+
+    if (e.key == 'ArrowDown') { 
+
+    	if(group5.position.z>-15){group5.translateZ(-5);}
+                               }
+
+}
+
+
+
+///Speed of the shape
+ if (group5.position.y >= targetPositionY5) {
+        group5.position.y -= 0.2;
+}
+
+renderer.render(scene, camera);
+
+
+}
+
+init();
+
+
+</script>
+
+
+</body>
+</html>
